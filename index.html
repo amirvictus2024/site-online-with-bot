@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WireGuard & DNS Generator</title>
+    <!-- استفاده از آیکون‌های Google Material Symbols Rounded -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <!-- فونت بولدتر -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>تنظیمات وایرگارد و DNS</h1>
+            <button class="tab" id="themeSwitch">
+                <span class="material-symbols-rounded">dark_mode</span>
+            </button>
+        </header>
+
+        <div class="tab-container">
+            <div class="tab active" data-tab="wireguard">
+                <span class="material-symbols-rounded">vpn_lock</span>
+                وایرگارد
+            </div>
+            <div class="tab" data-tab="dns">
+                <span class="material-symbols-rounded">dns</span>
+                DNS
+            </div>
+        </div>
+
+        <!-- بخش وایرگارد -->
+        <div id="wireguardSection">
+            <div class="input-group">
+                <label for="configName">نام کانفیگ:</label>
+                <input type="text" id="configName" class="input-field" placeholder="مثال: my-vpn">
+            </div>
+            <div class="locations-grid" id="locationsGrid"></div>
+            <!-- بخش نمایش مشخصات کانفیگ تولید شده -->
+            <div id="configOutput" class="output-container" style="display: none;"></div>
+        </div>
+
+        <!-- بخش DNS -->
+        <div id="dnsSection" style="display: none;">
+            <div class="input-group">
+                <label for="dnsLocation">انتخاب لوکیشن برای DNS:</label>
+                <select id="dnsLocation" class="input-field"></select>
+            </div>
+            <div id="dnsOutput" class="dns-output"></div>
+            <button class="button" id="generateDns">
+                <span class="material-symbols-rounded">refresh</span>
+                تولید DNS جدید
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

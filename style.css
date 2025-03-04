@@ -1,0 +1,322 @@
+:root {
+    --bg-light: #ffffff;
+    --text-light: #1d1d1f;
+    --bg-dark: #000000;
+    --text-dark: #f5f5f7;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --card-light: #fbfbfd;
+    --card-dark: #1d1d1f;
+    --border-light: rgba(0, 0, 0, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.1);
+    --success: #34c759;
+    --error: #ff3b30;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.dark .header {
+    border-bottom-color: var(--border-dark);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--accent), #6c47ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tab-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    padding: 0.5rem;
+    background: var(--card-light);
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.dark .tab-container {
+    background: var(--card-dark);
+}
+
+.tab {
+    padding: 0.8rem 1.5rem;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-weight: 700;
+    user-select: none;
+}
+
+.tab:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dark .tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
+}
+
+/* بهبود افکت hover برای دکمه تغییر تم */
+#themeSwitch:hover {
+    background: var(--accent-hover);
+    transform: scale(1.1);
+}
+
+.material-symbols-rounded {
+    font-size: 20px;
+}
+
+.input-group {
+    margin-bottom: 2rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-light);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.dark .input-field {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+}
+
+.input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+}
+
+.locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.location-card {
+    background: var(--card-light);
+    border-radius: 20px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border-light);
+}
+
+.location-card.active {
+    border: 2px solid var(--accent);
+}
+
+.dark .location-card {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+
+.location-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dark .location-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.flag-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
+}
+
+.button:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 113, 227, 0.4);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* خروجی DNS به صورت خطی */
+.dns-output {
+    display: block;
+}
+
+.dns-line {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    background: var(--card-light);
+    transition: all 0.3s ease;
+}
+
+.dark .dns-line {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+
+.dns-line span.copy-icon {
+    cursor: pointer;
+    margin-left: 1rem;
+    vertical-align: middle;
+}
+
+/* مشخصات کانفیگ وایرگارد (بخش خروجی) */
+.output-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: #1a1a1aaf;
+    /* پس‌زمینه سبز دلخواه */
+    color: #fff;
+    white-space: pre-wrap;
+    font-family: monospace;
+    direction: ltr;
+    text-align: left;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    color: white;
+    font-weight: 700;
+    display: none;
+    animation: scaleIn 0.3s ease-out;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.toast.success {
+    background: var(--success);
+}
+
+.toast.error {
+    background: var(--error);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .tab-container {
+        width: 100%;
+        overflow-x: auto;
+        padding: 0.5rem;
+    }
+
+    .locations-grid {
+        grid-template-columns: 1fr;
+    }
+}
