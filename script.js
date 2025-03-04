@@ -165,7 +165,7 @@ function generateWireGuardConfig(country, data) {
 PrivateKey = ${privateKey}
 Address = 10.202.10.10/32, ${wgIPv4}, ${wgIPv6}
 DNS = 78.157.42.100, ${dnsIPv4}, ${dnsIPv6_1}, ${dnsIPv6_2}
-MTU = 1280
+MTU = 1400
 
 [Peer]
 PublicKey = ${publicKey}
