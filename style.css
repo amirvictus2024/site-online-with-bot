@@ -238,29 +238,34 @@ body.dark {
     transform: translateY(0);
 }
 
-/* خروجی DNS به صورت خطی */
+/* نمایش خروجی DNS به صورت گرید کارتی */
 .dns-output {
-    display: block;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
 }
 
-.dns-line {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border: 1px solid var(--border-light);
-    border-radius: 20px;
+/* استایل کارت‌های DNS */
+.dns-card {
     background: var(--card-light);
-    transition: all 0.3s ease;
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-light);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dark .dns-line {
+.dark .dns-card {
     background: var(--card-dark);
     border-color: var(--border-dark);
 }
 
-.dns-line span.copy-icon {
-    cursor: pointer;
-    margin-left: 1rem;
-    vertical-align: middle;
+.dns-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dark .dns-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 /* مشخصات کانفیگ وایرگارد (بخش خروجی) */
@@ -270,7 +275,7 @@ body.dark {
     border: 1px solid var(--border-light);
     border-radius: 10px;
     background: #1a1a1aaf;
-    /* پس‌زمینه سبز دلخواه */
+    /* پس‌زمینه دلخواه */
     color: #fff;
     white-space: pre-wrap;
     font-family: monospace;
