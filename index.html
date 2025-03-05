@@ -39,7 +39,7 @@
                 <input type="text" id="configName" class="input-field" placeholder="مثال: my-vpn">
             </div>
             <div class="locations-grid" id="locationsGrid"></div>
-            <!-- بخش نمایش مشخصات کانفیگ تولید شده -->
+            <!-- خروجی کانفیگ وایرگارد -->
             <div id="configOutput" class="output-container" style="display: none;"></div>
         </div>
 
@@ -47,11 +47,40 @@
         <div id="dnsSection" style="display: none;">
             <div class="input-group">
                 <label>انتخاب لوکیشن برای DNS:</label>
-                <!-- استفاده از div به جای select برای نمایش کارت‌های لوکیشن -->
                 <div id="dnsLocationsGrid" class="locations-grid"></div>
             </div>
-            <!-- خروجی DNS به صورت گرید کارت نمایش داده می‌شود -->
-            <div id="dnsOutput" class="dns-output"></div>
+            <!-- بخش خروجی DNS با ساختار خواناتر -->
+            <section id="dnsOutput" class="dns-output">
+                <header class="output-header">
+                    <h2>تنظیمات DNS</h2>
+                </header>
+                <div class="dns-cards-container">
+                    <article class="dns-card">
+                        <div class="dns-card-header">DNS IPv4</div>
+                        <div class="dns-card-value" id="dnsIPv4Value">--.--.--.--</div>
+                        <button class="copy-btn"
+                            onclick="navigator.clipboard.writeText(document.getElementById('dnsIPv4Value').textContent).then(() => showToast('کپی شد'))">
+                            <span class="material-symbols-rounded">content_copy</span>
+                        </button>
+                    </article>
+                    <article class="dns-card">
+                        <div class="dns-card-header">DNS IPv6 (1)</div>
+                        <div class="dns-card-value" id="dnsIPv6Value1">----</div>
+                        <button class="copy-btn"
+                            onclick="navigator.clipboard.writeText(document.getElementById('dnsIPv6Value1').textContent).then(() => showToast('کپی شد'))">
+                            <span class="material-symbols-rounded">content_copy</span>
+                        </button>
+                    </article>
+                    <article class="dns-card">
+                        <div class="dns-card-header">DNS IPv6 (2)</div>
+                        <div class="dns-card-value" id="dnsIPv6Value2">----</div>
+                        <button class="copy-btn"
+                            onclick="navigator.clipboard.writeText(document.getElementById('dnsIPv6Value2').textContent).then(() => showToast('کپی شد'))">
+                            <span class="material-symbols-rounded">content_copy</span>
+                        </button>
+                    </article>
+                </div>
+            </section>
             <button class="button" id="generateDns">
                 <span class="material-symbols-rounded">refresh</span>
                 تولید DNS جدید
