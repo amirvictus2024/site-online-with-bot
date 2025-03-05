@@ -46,9 +46,11 @@
         <!-- بخش DNS -->
         <div id="dnsSection" style="display: none;">
             <div class="input-group">
-                <label for="dnsLocation">انتخاب لوکیشن برای DNS:</label>
-                <select id="dnsLocation" class="input-field"></select>
+                <label>انتخاب لوکیشن برای DNS:</label>
+                <!-- استفاده از div به جای select برای نمایش کارت‌های لوکیشن -->
+                <div id="dnsLocationsGrid" class="locations-grid"></div>
             </div>
+            <!-- خروجی DNS به صورت گرید کارت نمایش داده می‌شود -->
             <div id="dnsOutput" class="dns-output"></div>
             <button class="button" id="generateDns">
                 <span class="material-symbols-rounded">refresh</span>
