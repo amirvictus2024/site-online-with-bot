@@ -14,8 +14,8 @@ function showToast(message, type = 'success') {
 // توابع کمکی برای تولید گروه‌های IPv6
 function generateRandomGroup() {
   return Math.floor(Math.random() * 0x10000)
-           .toString(16)
-           .padStart(4, '0');
+    .toString(16)
+    .padStart(4, '0');
 }
 
 function generateLastGroup(fixed) {
@@ -69,6 +69,11 @@ function generateRandomIPv4(cidr) {
     randomIpInt & 0xFF
   ].join('.');
   return randomIp;
+}
+
+// تابع کمکی برای انتخاب تصادفی یک عنصر از آرایه
+function randomElement(array) {
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 // بارگذاری اطلاعات لوکیشن از فایل JSON
@@ -141,26 +146,24 @@ function generateWireGuardConfig(country, data) {
   const privateKey = generateKey(); // کلید 32 بایتی Base64
   const publicKey = generateKey();
 
+  // انتخاب تصادفی رنج‌های IPv4 و IPv6
+  const ipv4Range = randomElement(data.ipv4Ranges);
+  const ipv6Range = randomElement(data.ipv6Ranges);
+
   // بخش Address:
-  // ثابت: 10.202.10.10/32
-  // IPv4: تولید تصادفی از رنج IPv4
-  // IPv6: تولید بر مبنای پیشوند IPv6
-  const wgIPv4 = generateRandomIPv4(data.ipv4Ranges[0]);
-  const wgIPv6 = generateIPv6Address(data.ipv6Ranges[0].split('/')[0]);
+  const wgIPv4 = generateRandomIPv4(ipv4Range);
+  const wgIPv6 = generateIPv6Address(ipv6Range.split('/')[0]);
 
   // بخش DNS:
-  // ثابت: 78.157.42.100
-  // IPv4: تولید تصادفی از رنج IPv4
-  // IPv6: دو آدرس به فرمت دلخواه (با حرف آخر "1" و "0")
-  const dnsIPv4 = generateRandomIPv4(data.ipv4Ranges[0]);
-  const ipv6Prefix = data.ipv6Ranges[0].split('/')[0];
+  const dnsIPv4 = generateRandomIPv4(ipv4Range);
+  const ipv6Prefix = ipv6Range.split('/')[0];
   const dnsIPv6_1 = generateIPv6DNSCustom(ipv6Prefix, '1');
   const dnsIPv6_2 = generateIPv6DNSCustom(ipv6Prefix, '0');
 
-  // تولید Endpoint: از رنج IPv4 به صورت تصادفی + پورت 443
-  const endpoint = generateRandomIPv4(data.ipv4Ranges[0]) + ":443";
+  // تولید Endpoint:
+  const endpoint = generateRandomIPv4(ipv4Range) + ":443";
   const allowedIPs = "0.0.0.0/8, ::/8";
-  
+
   const config = `[Interface]
 PrivateKey = ${privateKey}
 Address = 10.202.10.10/32, ${wgIPv4}, ${wgIPv6}
@@ -172,13 +175,13 @@ PublicKey = ${publicKey}
 AllowedIPs = ${allowedIPs}
 Endpoint = ${endpoint}
 PersistentKeepalive = 15`;
-  
+
   // نمایش مشخصات کانفیگ در بخش output به همراه دکمه دانلود
   const configOutput = document.getElementById('configOutput');
   configOutput.innerHTML = `<pre>${config}</pre>
   <button class="button" id="downloadConfigBtn">دانلود کانفیگ</button>`;
   configOutput.style.display = 'block';
-  
+
   document.getElementById('downloadConfigBtn').addEventListener('click', () => {
     downloadConfig(config, configName);
   });
@@ -190,8 +193,10 @@ function updateDNSOutput() {
   const locationData = locationsData[selectedLocation];
   let ipv4, ipv6_1, ipv6_2;
   if (locationData) {
-    ipv4 = generateRandomIPv4(locationData.ipv4Ranges[0]);
-    const ipv6Prefix = locationData.ipv6Ranges[0].split('/')[0];
+    const ipv4Range = randomElement(locationData.ipv4Ranges);
+    const ipv6Range = randomElement(locationData.ipv6Ranges);
+    ipv4 = generateRandomIPv4(ipv4Range);
+    const ipv6Prefix = ipv6Range.split('/')[0];
     ipv6_1 = generateIPv6DNSCustom(ipv6Prefix, '1');
     ipv6_2 = generateIPv6DNSCustom(ipv6Prefix, '0');
   } else {
@@ -224,10 +229,10 @@ document.querySelectorAll('.tab').forEach(tab => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const tabName = tab.dataset.tab;
-      document.getElementById('wireguardSection').style.display = 
-          tabName === 'wireguard' ? 'block' : 'none';
-      document.getElementById('dnsSection').style.display = 
-          tabName === 'dns' ? 'block' : 'none';
+      document.getElementById('wireguardSection').style.display =
+        tabName === 'wireguard' ? 'block' : 'none';
+      document.getElementById('dnsSection').style.display =
+        tabName === 'dns' ? 'block' : 'none';
       if (tabName === 'dns') {
         updateDNSOutput();
       }
