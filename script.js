@@ -1,4 +1,5 @@
 let locationsData = {};
+let selectedDNSLocation = ""; // متغیر برای ذخیره لوکیشن انتخاب شده در بخش DNS
 
 // نمایش پیغام (Toast)
 function showToast(message, type = 'success') {
@@ -83,7 +84,7 @@ function loadLocations() {
     .then(data => {
       locationsData = data;
       populateLocationCards();
-      populateDNSLocationSelect();
+      populateDNSLocationCards();
       updateDNSOutput();
     })
     .catch(err => {
@@ -92,6 +93,7 @@ function loadLocations() {
     });
 }
 
+// ایجاد کارت‌های لوکیشن برای بخش وایرگارد
 function populateLocationCards() {
   const locationsGrid = document.getElementById('locationsGrid');
   locationsGrid.innerHTML = '';
@@ -112,16 +114,27 @@ function populateLocationCards() {
   }
 }
 
-function populateDNSLocationSelect() {
-  const dnsLocationSelect = document.getElementById('dnsLocation');
-  dnsLocationSelect.innerHTML = '';
+// ایجاد کارت‌های لوکیشن برای بخش DNS
+function populateDNSLocationCards() {
+  const dnsLocationsGrid = document.getElementById('dnsLocationsGrid');
+  dnsLocationsGrid.innerHTML = '';
   for (const country in locationsData) {
-    const option = document.createElement('option');
-    option.value = country;
-    option.textContent = country;
-    dnsLocationSelect.appendChild(option);
+    const data = locationsData[country];
+    const card = document.createElement('div');
+    card.className = 'location-card';
+    card.innerHTML = `
+      <img src="${data.flagUrl}" alt="${country}" class="flag-icon">
+      <h3>${country}</h3>
+    `;
+    card.addEventListener('click', () => {
+      // حذف کلاس active از همه کارت‌های DNS
+      document.querySelectorAll('#dnsLocationsGrid .location-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      selectedDNSLocation = country;
+      updateDNSOutput();
+    });
+    dnsLocationsGrid.appendChild(card);
   }
-  dnsLocationSelect.addEventListener('change', updateDNSOutput);
 }
 
 function generateKey() {
@@ -140,7 +153,6 @@ function downloadConfig(content, filename) {
 }
 
 // تولید فایل کانفیگ WireGuard با فرمت مورد نظر
-// به جای دانلود خودکار، مشخصات کانفیگ در بخش output نمایش داده می‌شود همراه با دکمه دانلود
 function generateWireGuardConfig(country, data) {
   const configName = document.getElementById('configName').value || 'wireguard-config';
   const privateKey = generateKey(); // کلید 32 بایتی Base64
@@ -188,9 +200,17 @@ PersistentKeepalive = 15`;
 }
 
 function updateDNSOutput() {
-  const dnsLocationSelect = document.getElementById('dnsLocation');
-  const selectedLocation = dnsLocationSelect.value;
-  const locationData = locationsData[selectedLocation];
+  // اگر کارتی انتخاب نشده باشد، اولین کشور رو انتخاب می‌کنیم
+  let locationName = selectedDNSLocation;
+  if (!locationName) {
+    locationName = Object.keys(locationsData)[0];
+    selectedDNSLocation = locationName;
+    const firstCard = document.querySelector('#dnsLocationsGrid .location-card');
+    if (firstCard) {
+      firstCard.classList.add('active');
+    }
+  }
+  const locationData = locationsData[locationName];
   let ipv4, ipv6_1, ipv6_2;
   if (locationData) {
     const ipv4Range = randomElement(locationData.ipv4Ranges);
@@ -207,16 +227,19 @@ function updateDNSOutput() {
   }
   const dnsOutput = document.getElementById('dnsOutput');
   dnsOutput.innerHTML = `
-    <div class="dns-line">
-      <strong>DNS IPv4:</strong> <span>${ipv4}</span>
+    <div class="dns-card">
+      <strong>DNS IPv4:</strong>
+      <span>${ipv4}</span>
       <span class="material-symbols-rounded copy-icon" onclick="navigator.clipboard.writeText('${ipv4}').then(() => showToast('کپی شد'))">content_copy</span>
     </div>
-    <div class="dns-line">
-      <strong>DNS IPv6:</strong> <span>${ipv6_1}</span>
+    <div class="dns-card">
+      <strong>DNS IPv6:</strong>
+      <span>${ipv6_1}</span>
       <span class="material-symbols-rounded copy-icon" onclick="navigator.clipboard.writeText('${ipv6_1}').then(() => showToast('کپی شد'))">content_copy</span>
     </div>
-    <div class="dns-line">
-      <strong>DNS IPv6:</strong> <span>${ipv6_2}</span>
+    <div class="dns-card">
+      <strong>DNS IPv6:</strong>
+      <span>${ipv6_2}</span>
       <span class="material-symbols-rounded copy-icon" onclick="navigator.clipboard.writeText('${ipv6_2}').then(() => showToast('کپی شد'))">content_copy</span>
     </div>
   `;
@@ -233,6 +256,7 @@ document.querySelectorAll('.tab').forEach(tab => {
         tabName === 'wireguard' ? 'block' : 'none';
       document.getElementById('dnsSection').style.display =
         tabName === 'dns' ? 'block' : 'none';
+      // در صورت تغییر تب به DNS، خروجی DNS به‌روز شود
       if (tabName === 'dns') {
         updateDNSOutput();
       }
